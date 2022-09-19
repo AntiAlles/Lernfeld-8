@@ -1,12 +1,23 @@
 from multiprocessing.dummy import current_process
 from threading import current_thread
 from linode_api4 import *
-toekn = "014415c4e2a9f7049f4b7558f13b8cc6e6f5bc686ad88eb0c3fc10b1cff787f8"
-client = LinodeClient(toekn)
+import re
 
-Linode_ID = 35495125
-my_instance = Instance(client, Linode_ID)
+# Needed Vars to call the api
+token = ""
+client = LinodeClient(token)
 
-##for i in Current_load:
-Current_load = my_instance.stats
-print(Current_load)
+#get instance ids
+Linode_Array = client.linode.instances()
+
+# function to itterate through the Linode_Array list
+for x in Linode_Array:
+    #turn the list into a string and remove everything after the first ": "
+    Linode_ID = str(x).split(": ")[1]
+
+    #call the instance class with the ID and token
+    my_instance = Instance(client, Linode_ID)
+
+    #Get current stats from instance
+    Current_load = my_instance.stats
+    print(Current_load)
