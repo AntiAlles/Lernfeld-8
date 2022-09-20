@@ -1,5 +1,3 @@
-from multiprocessing.dummy import current_process
-from threading import current_thread
 from linode_api4 import *
 import re
 
