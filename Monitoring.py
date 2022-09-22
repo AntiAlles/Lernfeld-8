@@ -1,14 +1,18 @@
 from multiprocessing.dummy import current_process
 from threading import current_thread
+from time import time
+from tkinter.tix import DirTree
 from linode_api4 import *
 import re
+import json
 
 # Needed Vars to call the api
-token = ""
+token = "014415c4e2a9f7049f4b7558f13b8cc6e6f5bc686ad88eb0c3fc10b1cff787f8"
 client = LinodeClient(token)
 
 #get instance ids
 Linode_Array = client.linode.instances()
+
 
 # function to itterate through the Linode_Array list
 for x in Linode_Array:
@@ -20,4 +24,11 @@ for x in Linode_Array:
 
     #Get current stats from instance
     Current_load = my_instance.stats
-    print(Current_load)
+
+    #Converting the serialized JSON into a str
+    json_string = json.dumps(Current_load)
+    
+    #creating a Json datafile
+    my_file = open("data.json","w+")
+    my_file.write(json_string)
+    
