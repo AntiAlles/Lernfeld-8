@@ -1,13 +1,10 @@
-from multiprocessing.dummy import current_process
-from threading import current_thread
 from time import time
-from tkinter.tix import DirTree
 from linode_api4 import *
 import re
 import json
 
 # Needed Vars to call the api
-token = "014415c4e2a9f7049f4b7558f13b8cc6e6f5bc686ad88eb0c3fc10b1cff787f8"
+token = ""
 client = LinodeClient(token)
 
 #get instance ids
@@ -32,3 +29,20 @@ for x in Linode_Array:
     my_file = open("data.json","w+")
     my_file.write(json_string)
     
+    f = open('data.json')      
+    data = json.load(f)
+
+    #go through the data dictionary to extract the right information
+    for io in data["data"]["io"]["io"]:
+        print(io)
+
+    for cpu in data["data"]["cpu"]:
+        print(cpu)
+
+    for ipv4 in data["data"]["netv4"]["in"]:
+        print(ipv4)
+        
+    for ipv6 in data["data"]["netv6"]["in"]:
+        print(ipv6)
+
+    f.close
