@@ -1,3 +1,4 @@
+from datetime import datetime as timedate
 from time import time
 from linode_api4 import *
 import re
@@ -33,15 +34,22 @@ for x in Linode_Array:
     data = json.load(f)
 
     #go through the data dictionary to extract the right information
+    print("io")
     for io in data["data"]["io"]["io"]:
-        print(io)
 
+        ts = int(io[0]/1000)
+        print(timedate.utcfromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S'))
+        print(io[1],"%")
+
+    print("CPU")
     for cpu in data["data"]["cpu"]:
-        print(cpu)
+        print(cpu, "%")
 
+    print("IPv4")
     for ipv4 in data["data"]["netv4"]["in"]:
         print(ipv4)
-        
+    
+    print("IPv6")
     for ipv6 in data["data"]["netv6"]["in"]:
         print(ipv6)
 
