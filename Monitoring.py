@@ -1,21 +1,18 @@
-from datetime import datetime as timedate
-from time import time
-from linode_api4 import *
-import re
-import json
+from data_class import *
+
+load_dotenv()
 
 # Needed Vars to call the api
-token = ""
-client = LinodeClient(token)
+client = LinodeClient(os.getenv('TOKEN'))
 
 #get instance ids
-Linode_Array = client.linode.instances()
+Linode_Instances = client.linode.instances()
 
 
 # function to itterate through the Linode_Array list
-for x in Linode_Array:
+for Linode_Instance in Linode_Instances:
     #turn the list into a string and remove everything after the first ": "
-    Linode_ID = str(x).split(": ")[1]
+    Linode_ID = str(Linode_Instance).split(": ")[1]
 
     #call the instance class with the ID and token
     my_instance = Instance(client, Linode_ID)
@@ -33,24 +30,42 @@ for x in Linode_Array:
     f = open('data.json')      
     data = json.load(f)
 
-    #go through the data dictionary to extract the right information
-    print("io")
-    for io in data["data"]["io"]["io"]:
+    last_entry = int(286)
+    cpu = data["data"]["cpu"][last_entry] 
+    io = data["data"]["io"]["io"][last_entry]
+    ipv4 = data["data"]["netv4"]["in"][last_entry]
+    ipv6 = data["data"]["netv6"]["in"][last_entry]
 
-        ts = int(io[0]/1000)
-        print(timedate.utcfromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S'))
-        print(io[1],"%")
-
+    #display the cpu usage with timestamp
     print("CPU")
-    for cpu in data["data"]["cpu"]:
-        print(cpu, "%")
+    #Convert first array item into integer and divide it by 1000
+    timestamp = int(cpu[0]/1000)
+    #Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds 
+    print(timedate.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S'))
+    print(cpu[1],"%")
 
+    #display the io usage as blocks/s with timestamp
+    print("io")
+    #Convert first array item into integer and divide it by 1000
+    timestamp = int(io[0]/1000)
+    #Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds 
+    print(timedate.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S'))
+    print(io[1],"b/s")
+
+    #display the network ipv4 usage with timestamp
     print("IPv4")
-    for ipv4 in data["data"]["netv4"]["in"]:
-        print(ipv4)
-    
-    print("IPv6")
-    for ipv6 in data["data"]["netv6"]["in"]:
-        print(ipv6)
+    #Convert first array item into integer and divide it by 1000
+    timestamp = int(ipv4[0]/1000)
+    #Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds 
+    print(timedate.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S'))
+    print(ipv4[1],"Bits/s")    
 
+    #display the network ipv6 usage with timestamp
+    print("IPv6")
+    #Convert first array item into integer and divide it by 1000
+    timestamp = int(ipv6[0]/1000)
+    #Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds 
+    print(timedate.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S'))
+    print(ipv6[1],"Bits/s")
+    
     f.close
