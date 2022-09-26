@@ -1,9 +1,12 @@
+from asyncio.log import logger
 from datetime import datetime as timedate
+from email import message
 from time import time
 from linode_api4 import *
 from dotenv import load_dotenv
 
 import smtplib
+import logging
 import re
 import json
 import os
@@ -36,6 +39,11 @@ class monitor():
             my_file.write(json_string)
 
     def updateLog():
+        
+        # function to get the IDs of the Linode Instances 
+        monitor.getInstanceID()
+
+        #Open and map data.json
         f = open('data.json')
         data = json.load(f)
 
@@ -46,23 +54,23 @@ class monitor():
         ipv4 = data["data"]["netv4"]["in"][last_entry]
         ipv6 = data["data"]["netv6"]["in"][last_entry]
 
-        # Convert first array item of Cpu into integer and divide it by 1000
-        timestamp = int(cpu[0]/1000)
-        # Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds
-        print(timedate.utcfromtimestamp(
-            timestamp).strftime('%Y-%m-%d %H:%M:%S'))
+        #Configure the logging method
+        logging.basicConfig(filename="log.txt", level=logging.INFO, format='%(message)s', force=True)
+        
+        # Convert first array item of Cpu into integer and divide it by 1000 Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds
+        timestamp = timedate.utcfromtimestamp(int(cpu[0]/1000)).strftime('%Y-%m-%d %H:%M:%S')
+
+        message = str(timestamp) + "; CPU:" + str(cpu[1]) + "%;" + "io:" + str(io[1]) + "B/s; " + "IPv4: " + str(ipv4[1]) + "Bits/s; " + "IPv6: " + str(ipv6[1]) + "Bits/s"
+        logging.critical(message)
 
         # display the cpu usage
-        print("CPU:", cpu[1], "%")
-
+        #print("CPU:", cpu[1], "%")
         # display the io usage as blocks/s
-        print("io:", io[1], "b/s")
-
+        #print("io:", io[1], "b/s")
         # display the network ipv4 usage
-        print("IPv4: ", ipv4[1], "Bits/s")
-
+        #print("IPv4: ", ipv4[1], "Bits/s")
         # display the network ipv6 usage
-        print("IPv6: ", ipv6[1], "Bits/s")
+        #print("IPv6: ", ipv6[1], "Bits/s")
 
         f.close
 
@@ -104,18 +112,18 @@ class Alarm():
         data = json.load(f)
 
         #Maximum CPU Utilization in % 
-        MaxLoad = 0
+        MaxCPULoad = 80
 
         #Variables for the Location in the Python Dir of data
         last_entry = int(286)
         cpu = data["data"]["cpu"][last_entry]
 
         # display the cpu usage
-        if int(cpu[1]) >= MaxLoad:
+        if int(cpu[1]) >= MaxCPULoad:
 
             # Text inside of the Mail
             subject = "Server Warning: CPU Load over threshold"
-            body = "WARNING! CPU Load on server exceeded threshold! Current server load: " + str(cpu[1])
+            body = "WARNING! CPU Load on server exceeded threshold! Current server load: " + str(cpu[1]) + "%"
 
             # function to send mail with prepared text
             Alarm.send_email(subject, body)
@@ -127,9 +135,22 @@ class Alarm():
         f = open('data.json')
         data = json.load(f)
 
+        # Maximum Blocks/s io usage
+        MaxioLoad = 4
+
         #Variables for the Location in the Python Dir of data
         last_entry = int(286)
         io = data["data"]["io"]["io"][last_entry]
 
-        # display the io usage
-        print("IO:", io[1], "B/s")
+        # display the cpu usage
+        if int(io[1]) >= MaxioLoad:
+
+            # Text inside of the Mail
+            subject = "Server Warning: CPU Load over threshold"
+            body = "WARNING! IO Load on server exceeded threshold! Current server load: " + str(io[1]) + "Blocks/s"
+
+            # function to send mail with prepared text
+            Alarm.send_email(subject, body)
+
+            #Alarm in Prompt
+            print("ALARM JUNGE io IST BEI:", io[1], "Blocks/s")
