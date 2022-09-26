@@ -71,10 +71,12 @@ class Alarm():
 
     def send_email(subject, body):
 
+        # Env Variables for the login into gmail mail server and recipient of the mails
         user = os.getenv('USER')
         pwd = os.getenv('PWD')
         recipient = os.getenv('RECIPIENT')
 
+        # enter prepared variables into Constant so they cant change anymore
         FROM = user
         TO = recipient if isinstance(recipient, list) else [recipient]
         SUBJECT = subject
@@ -83,6 +85,7 @@ class Alarm():
         # Prepare actual message
         message = """From: %s\nTo: %s\nSubject: %s\n\n%s
         """ % (FROM, ", ".join(TO), SUBJECT, TEXT)
+        # Try connection to gmail smtp server, login and send mail
         try:
             server = smtplib.SMTP("smtp.gmail.com", 587)
             server.ehlo()
@@ -90,9 +93,10 @@ class Alarm():
             server.login(user, pwd)
             server.sendmail(FROM, TO, message)
             server.close()
-            print('successfully sent the mail')
+            print('Successfully sent the mail')
+        # Throw error incase gmail smtp server refuses to send the mail or accept the password 
         except:
-            print("failed to send mail")
+            print("Failed to send mail")
 
 
     def ScanCPULoad():
@@ -108,9 +112,15 @@ class Alarm():
 
         # display the cpu usage
         if int(cpu[1]) >= MaxLoad:
+
+            # Text inside of the Mail
             subject = "Server Warning: CPU Load over threshold"
-            body = "WARNING! CPU Load on server exceeded threshold! Current server load:", cpu[1]
+            body = "WARNING! CPU Load on server exceeded threshold! Current server load: " + str(cpu[1])
+
+            # function to send mail with prepared text
             Alarm.send_email(subject, body)
+
+            #Alarm in Prompt
             print("ALARM JUNGE CPU IST BEI:", cpu[1], "%")
 
     def ScanIoUsage():
@@ -121,5 +131,5 @@ class Alarm():
         last_entry = int(286)
         io = data["data"]["io"]["io"][last_entry]
 
-        # display the cpu usage
-        print("CPU:", io[1], "%")
+        # display the io usage
+        print("IO:", io[1], "B/s")
