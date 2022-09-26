@@ -1,7 +1,7 @@
 from asyncio.log import logger
 from datetime import datetime as timedate
 from email import message
-from time import time
+from time import *
 from linode_api4 import *
 from dotenv import load_dotenv
 
@@ -154,3 +154,4 @@ class Alarm():
 
             #Alarm in Prompt
             print("ALARM JUNGE io IST BEI:", io[1], "Blocks/s")
+        
