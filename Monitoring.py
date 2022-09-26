@@ -36,36 +36,21 @@ for Linode_Instance in Linode_Instances:
     ipv4 = data["data"]["netv4"]["in"][last_entry]
     ipv6 = data["data"]["netv6"]["in"][last_entry]
 
-    #display the cpu usage with timestamp
-    print("CPU")
-    #Convert first array item into integer and divide it by 1000
+    #Convert first array item of Cpu into integer and divide it by 1000
     timestamp = int(cpu[0]/1000)
     #Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds 
     print(timedate.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S'))
-    print(cpu[1],"%")
+
+    #display the cpu usage with timestamp
+    print("CPU:", cpu[1],"%")
 
     #display the io usage as blocks/s with timestamp
-    print("io")
-    #Convert first array item into integer and divide it by 1000
-    timestamp = int(io[0]/1000)
-    #Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds 
-    print(timedate.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S'))
-    print(io[1],"b/s")
+    print("io:", io[1],"b/s")
 
     #display the network ipv4 usage with timestamp
-    print("IPv4")
-    #Convert first array item into integer and divide it by 1000
-    timestamp = int(ipv4[0]/1000)
-    #Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds 
-    print(timedate.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S'))
-    print(ipv4[1],"Bits/s")    
+    print("IPv4: ", ipv4[1],"Bits/s")    
 
     #display the network ipv6 usage with timestamp
-    print("IPv6")
-    #Convert first array item into integer and divide it by 1000
-    timestamp = int(ipv6[0]/1000)
-    #Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds 
-    print(timedate.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S'))
-    print(ipv6[1],"Bits/s")
+    print("IPv6: ", ipv6[1],"Bits/s")
     
     f.close
