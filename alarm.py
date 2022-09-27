@@ -1,11 +1,11 @@
-from email import message
 import smtplib
 import os
 
 class Alarm():
 
     def send_email(subject, body):
-
+        if os.getenv('IS_TEST_ENV') == 'true': 
+            return
         # Env Variables for the login into gmail mail server and recipient of the mails
         user = os.getenv('USER')
         password = os.getenv('PASSWORD')
@@ -34,16 +34,13 @@ class Alarm():
             print("Failed to send mail")
 
 
-    def scan_CPU_load(data):
-        #Maximum CPU Utilization in % 
-        MaxCPULoad = 80
+    def is_CPU_over_threshold(data, max_CPU_load):
 
         #Variables for the Location in the Python Dir of data
-        last_entry = int(286)
-        cpu = data["data"]["cpu"][last_entry]
+        cpu = data["data"]["cpu"][-1]
 
         # display the cpu usage
-        if int(cpu[1]) >= MaxCPULoad:
+        if int(cpu[1]) >= max_CPU_load:
 
             # Text inside of the Mail
             subject = "Server Warning: CPU Load over threshold"
@@ -54,20 +51,19 @@ class Alarm():
 
             #Alarm in Prompt
             print("ALARM JUNGE CPU IST BEI:", cpu[1], "%")
+            return True
+        return False    
 
-    def scan_IO_usage(data):
-        # Maximum Blocks/s io usage
-        MaxioLoad = 4
+    def is_IO_over_threshold(data, max_IO_load):
 
         #Variables for the Location in the Python Dir of data
-        last_entry = int(286)
-        io = data["data"]["io"]["io"][last_entry]
+        io = data["data"]["io"]["io"][-1]
 
-        # display the cpu usage
-        if int(io[1]) >= MaxioLoad:
+        # display the io usage
+        if int(io[1]) >= max_IO_load:
 
             # Text inside of the Mail
-            subject = "Server Warning: CPU Load over threshold"
+            subject = "Server Warning: IO Load over threshold"
             body = "WARNING! IO Load on server exceeded threshold! Current server load: " + str(io[1]) + "Blocks/s"
 
             # function to send mail with prepared text
@@ -75,4 +71,5 @@ class Alarm():
 
             #Alarm in Prompt
             print("ALARM JUNGE io IST BEI:", io[1], "Blocks/s")
-        
+            return True
+        return False  

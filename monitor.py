@@ -26,17 +26,16 @@ class Monitor():
     def update_log(data):
 
         #Variables for the Location in the Python Dir of data
-        last_entry = int(286)
-        cpu = data["data"]["cpu"][last_entry]
-        io = data["data"]["io"]["io"][last_entry]
-        ipv4 = data["data"]["netv4"]["in"][last_entry]
-        ipv6 = data["data"]["netv6"]["in"][last_entry]
+        cpu = data["data"]["cpu"][-1]
+        io = data["data"]["io"]["io"][-1]
+        ipv4 = data["data"]["netv4"]["in"][-1]
+        ipv6 = data["data"]["netv6"]["in"][-1]
 
         #Configure the logging method
-        logging.basicConfig(filename="log.txt", level=logging.INFO, format='%(message)s', force=True)
+        logging.basicConfig(filename="status.log", level=logging.INFO, format='%(message)s', force=True)
         
         # Convert first array item of Cpu into integer and divide it by 1000 Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds
         timestamp = timedate.utcfromtimestamp(int(cpu[0]/1000)).strftime('%Y-%m-%d %H:%M:%S')
 
-        message = str(timestamp) + "; CPU:" + str(cpu[1]) + "%;" + "io:" + str(io[1]) + "B/s; " + "IPv4: " + str(ipv4[1]) + "Bits/s; " + "IPv6: " + str(ipv6[1]) + "Bits/s"
+        message = str(timestamp) + "; CPU:" + str(cpu[1]) + "%; " + "io:" + str(io[1]) + "B/s; " + "IPv4: " + str(ipv4[1]) + "Bits/s; " + "IPv6: " + str(ipv6[1]) + "Bits/s"
         logging.critical(message)

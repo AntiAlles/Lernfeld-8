@@ -12,10 +12,10 @@ while True:
     # function to update the log file and print current stats to the prompt
     Monitor.update_log(data)
 
-    # function to scan for CPU Load over the MaxCPULoad Value given
-    Alarm.scan_CPU_load(data)
+    # function to scan for CPU Load over the max_CPU_load Value given
+    Alarm.is_CPU_over_threshold(data, 80)
 
-    # function to scan for IO load over the MaxioLoad value given
-    Alarm.scan_IO_usage(data)
+    # function to scan for IO load over the max_IO_usage value given
+    Alarm.is_IO_over_threshold(data, 4)
     print("Run Done")
-    time.sleep(10)
+    time.sleep(300)

@@ -1,4 +1,5 @@
 .env
 data.json
 log.txt
+status.log
 __pycache__
