@@ -1,4 +1,4 @@
 linode_api4
 tkinter
-peewee
 python-dotenv
+pytest
