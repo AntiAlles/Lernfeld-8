@@ -6,14 +6,7 @@ from threading import Thread
 class __init__:
 
     # function the main process of logging the data into the status.log and scan for unusual high loads
-    def main():
-
-        cpu_max_soft = int(input("Max CPU Load(0 - 100):\n"))
-        io_max_soft = int(input("Max io Load(0 - 6):\n"))
-        
-        
-        secondary_thread = Thread(target=__init__.secondary())
-        secondary_thread.join()
+    def main(cpu_max_soft, io_max_soft):
 
         while True:    
             # function to get the IDs of the Linode Instances 
