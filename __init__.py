@@ -47,3 +47,6 @@ class __init__:
 
                 elif prompt_input == "ipv6":
                     Display.display_ipv6(data)
+                
+                else:
+                    print("Enter '-h' or '' to display your options ")
