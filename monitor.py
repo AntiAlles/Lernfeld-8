@@ -1,4 +1,5 @@
 from datetime import datetime as timedate
+from sqlite3 import Timestamp
 from linode_api4 import *
 import logging
 import os
@@ -39,3 +40,11 @@ class Monitor():
 
         message = str(timestamp) + "; CPU:" + str(cpu[1]) + "%; " + "io:" + str(io[1]) + "B/s; " + "IPv4: " + str(ipv4[1]) + "Bits/s; " + "IPv6: " + str(ipv6[1]) + "Bits/s"
         logging.critical(message)
+
+    def display_cpu(data):
+
+        #print the variable in last place of cpu in the data dir
+        cpu = data["data"]["cpu"][-1]
+
+        # Convert first array item of Cpu into integer and divide it by 1000 Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds
+        print(str(timedate.utcfromtimestamp(int(cpu[0]/1000)).strftime('%Y-%m-%d %H:%M:%S')) + " CPU Load is " + str(cpu[1]) + "%")
