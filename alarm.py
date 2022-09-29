@@ -34,13 +34,13 @@ class Alarm():
             print("Failed to send mail")
 
 
-    def is_CPU_over_threshold(data, max_CPU_load):
+    def is_CPU_over_threshold(data, max_CPU_load, cpu_max_soft):
 
         #Variables for the Location in the Python Dir of data
         cpu = data["data"]["cpu"][-1]
 
         # display the cpu usage
-        if int(cpu[1]) >= max_CPU_load:
+        if int(cpu[1]) >= max_CPU_load or int(cpu[1]) >= cpu_max_soft:
 
             # Text inside of the Mail
             subject = "Server Warning: CPU Load over threshold"
@@ -54,13 +54,13 @@ class Alarm():
             return True
         return False    
 
-    def is_IO_over_threshold(data, max_IO_load):
+    def is_IO_over_threshold(data, max_IO_load, io_max_soft):
 
         #Variables for the Location in the Python Dir of data
         io = data["data"]["io"]["io"][-1]
 
         # display the io usage
-        if int(io[1]) >= max_IO_load:
+        if int(io[1]) >= max_IO_load or int(io[1]) >= io_max_soft:
 
             # Text inside of the Mail
             subject = "Server Warning: IO Load over threshold"

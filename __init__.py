@@ -1,11 +1,19 @@
 from monitor import Monitor, Display
 from alarm import Alarm
 import time
+from threading import Thread
 
 class __init__:
 
     # function the main process of logging the data into the status.log and scan for unusual high loads
     def main():
+
+        cpu_max_soft = int(input("Max CPU Load(0 - 100):\n"))
+        io_max_soft = int(input("Max io Load(0 - 6):\n"))
+        
+        
+        secondary_thread = Thread(target=__init__.secondary())
+        secondary_thread.join()
 
         while True:    
             # function to get the IDs of the Linode Instances 
@@ -15,10 +23,10 @@ class __init__:
             Monitor.update_log(data)
 
             # function to scan for CPU Load over the max_CPU_load Value given
-            Alarm.is_CPU_over_threshold(data, 80)
+            Alarm.is_CPU_over_threshold(data, 80, cpu_max_soft)
 
             # function to scan for IO load over the max_IO_usage value given
-            Alarm.is_IO_over_threshold(data, 4)
+            Alarm.is_IO_over_threshold(data, 4, io_max_soft)
 
             # Wait for 10 seconds
             time.sleep(10)
