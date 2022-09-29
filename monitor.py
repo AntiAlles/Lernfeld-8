@@ -26,13 +26,13 @@ class Monitor():
 
     def update_log(data):
 
-        #Variables for the Location in the Python Dir of data
+        # Variables for the Location in the Python Dir of data
         cpu = data["data"]["cpu"][-1]
         io = data["data"]["io"]["io"][-1]
         ipv4 = data["data"]["netv4"]["in"][-1]
         ipv6 = data["data"]["netv6"]["in"][-1]
 
-        #Configure the logging method
+        # configure the logging method
         logging.basicConfig(filename="status.log", level=logging.INFO, format='%(message)s', force=True)
         
         # Convert first array item of Cpu into integer and divide it by 1000 Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds
@@ -45,7 +45,7 @@ class Display():
 
     def display_cpu(data):
 
-        #print the variable in last place of cpu in the data dir
+        # print the variable in last place of cpu in the data dir
         cpu = data["data"]["cpu"][-1]
 
         # Convert first array item of Cpu into integer and divide it by 1000 Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds
@@ -53,15 +53,15 @@ class Display():
     
     def display_io(data):
 
-        #print the variable in last place of cpu in the data dir
+        # print the variable in last place of cpu in the data dir
         io = data["data"]["io"]["io"][-1]
 
         # Convert first array item of Cpu into integer and divide it by 1000 Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds
-        print(str(timedate.utcfromtimestamp(int(io[0]/1000)).strftime('%Y-%m-%d %H:%M:%S')) + " io Load is " + str(io[1]) + "Blocks/s")
+        print(str(timedate.utcfromtimestamp(int(io[0]/1000)).strftime('%Y-%m-%d %H:%M:%S')) + " IO Load is " + str(io[1]) + "Blocks/s")
     
     def display_ipv4(data):
 
-        #print the variable in last place of cpu in the data dir
+        # print the variable in last place of cpu in the data dir
         ipv4 = data["data"]["netv4"]["in"][-1]
 
         # Convert first array item of Cpu into integer and divide it by 1000 Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds
@@ -69,7 +69,7 @@ class Display():
    
     def display_ipv6(data):
 
-        #print the variable in last place of cpu in the data dir
+        # print the variable in last place of cpu in the data dir
         ipv6 = data["data"]["netv6"]["in"][-1]
 
         # Convert first array item of Cpu into integer and divide it by 1000 Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds
