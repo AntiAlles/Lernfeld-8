@@ -48,6 +48,7 @@ class Alarm():
             #Alarm in logs        
             message = str(timedate.utcfromtimestamp(int(cpu[0]/1000)).strftime('%Y-%m-%d %H:%M:%S'))+ "; " + str(body) 
             logging.critical(str(message))
+            return True
 
         elif int(cpu[1]) >= max_CPU_load:
 
@@ -75,6 +76,7 @@ class Alarm():
             #Alarm in logs        
             message = str(timedate.utcfromtimestamp(int(io[0]/1000)).strftime('%Y-%m-%d %H:%M:%S')) + "; " + str(body) 
             logging.critical(str(message))
+            return True
             
         # display the io usage
         elif int(io[1]) >= max_IO_load:

@@ -4,4 +4,3 @@ log.txt
 status.log
 __pycache__
 .pytest_cache
-test.py
