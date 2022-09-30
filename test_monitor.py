@@ -19,7 +19,7 @@ class TestMonitor(unittest.TestCase):
         log_content_file = open('status.log', 'r')
         log_content = log_content_file.read()
         log_content_file.close()
-        target_string = "2022-09-26 22:10:00; CPU:1.1%; io:1.08Blocks/s; IPv4: 3088.88Bits/s; IPv6: 51.52Bits/s\n"
+        target_string = "INFO:2022-09-26 22:10:00; CPU:1.1%; io:1.08Blocks/s; IPv4: 3088.88Bits/s; IPv6: 51.52Bits/s\n"
         
         self.assertEqual(log_content, target_string)
         
