@@ -15,10 +15,10 @@ class __init__:
             Monitor.update_log(data)
 
             # function to scan for CPU Load over the max_CPU_load Value given
-            Alarm.is_CPU_over_threshold(data, 80)
+            Alarm.is_CPU_over_threshold(data, 80, 0)
 
             # function to scan for IO load over the max_IO_usage value given
-            Alarm.is_IO_over_threshold(data, 4)
+            Alarm.is_IO_over_threshold(data, 4, 0)
 
             # Wait for 10 seconds
             time.sleep(10)

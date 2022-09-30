@@ -1,4 +1,6 @@
+from datetime import datetime as timedate
 import smtplib
+import logging
 import os
 
 class Alarm():
@@ -34,42 +36,58 @@ class Alarm():
             print("Failed to send mail")
 
 
-    def is_CPU_over_threshold(data, max_CPU_load):
+    def is_CPU_over_threshold(data, max_CPU_load, soft_CPU_load):
 
         #Variables for the Location in the Python Dir of data
         cpu = data["data"]["cpu"][-1]
+        body = "CPU Load on server exceeded threshold! Current server load: " + str(cpu[1]) + "%"
 
         # display the cpu usage
-        if int(cpu[1]) >= max_CPU_load:
+        if int(cpu[1]) >= soft_CPU_load <= max_CPU_load:
+            
+            #Alarm in logs        
+            message = str(timedate.utcfromtimestamp(int(cpu[0]/1000)).strftime('%Y-%m-%d %H:%M:%S'))+ "; " + str(body) 
+            logging.critical(str(message))
+
+        elif int(cpu[1]) >= max_CPU_load:
 
             # Text inside of the Mail
             subject = "Server Warning: CPU Load over threshold"
-            body = "WARNING! CPU Load on server exceeded threshold! Current server load: " + str(cpu[1]) + "%"
 
             # function to send mail with prepared text
             Alarm.send_email(subject, body)
-
-            #Alarm in Prompt
-            print("ALARM JUNGE CPU IST BEI:", cpu[1], "%")
+            
+            #Alarm in logs        
+            message = str(timedate.utcfromtimestamp(int(cpu[0]/1000)).strftime('%Y-%m-%d %H:%M:%S')) + str(body) 
+            logging.critical(str(message))
             return True
         return False    
 
-    def is_IO_over_threshold(data, max_IO_load):
+    def is_IO_over_threshold(data, max_IO_load, soft_IO_load):
 
         #Variables for the Location in the Python Dir of data
         io = data["data"]["io"]["io"][-1]
+        body = "IO Load on server exceeded threshold! Current server load: " + str(io[1]) + "%"
 
+
+        if int(io[1]) >= soft_IO_load <= max_IO_load:
+            
+            #Alarm in logs        
+            message = str(timedate.utcfromtimestamp(int(io[0]/1000)).strftime('%Y-%m-%d %H:%M:%S')) + "; " + str(body) 
+            logging.critical(str(message))
+            
         # display the io usage
-        if int(io[1]) >= max_IO_load:
+        elif int(io[1]) >= max_IO_load:
 
             # Text inside of the Mail
             subject = "Server Warning: IO Load over threshold"
-            body = "WARNING! IO Load on server exceeded threshold! Current server load: " + str(io[1]) + "Blocks/s"
+            body = "IO Load on server exceeded threshold! Current server load: " + str(io[1]) + "Blocks/s"
 
             # function to send mail with prepared text
             Alarm.send_email(subject, body)
 
-            #Alarm in Prompt
-            print("ALARM JUNGE io IST BEI:", io[1], "Blocks/s")
+            #Alarm in logs        
+            message = str(timedate.utcfromtimestamp(int(io[0]/1000)).strftime('%Y-%m-%d %H:%M:%S')) + "; " + str(body) 
+            logging.critical(str(message))
             return True
         return False  

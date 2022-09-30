@@ -1,5 +1,4 @@
 from datetime import datetime as timedate
-from sqlite3 import Timestamp
 from linode_api4 import *
 import logging
 import os
@@ -33,13 +32,13 @@ class Monitor():
         ipv6 = data["data"]["netv6"]["in"][-1]
 
         # configure the logging method
-        logging.basicConfig(filename="status.log", level=logging.INFO, format='%(message)s', force=True)
+        logging.basicConfig(filename="status.log", level=logging.INFO, format='%(levelname)s:%(message)s', force=True)
         
         # Convert first array item of Cpu into integer and divide it by 1000 Print UTC timestamp of server With Year-Month-Day Hour-Minute-Seconds
         timestamp = timedate.utcfromtimestamp(int(cpu[0]/1000)).strftime('%Y-%m-%d %H:%M:%S')
 
         message = str(timestamp) + "; CPU:" + str(cpu[1]) + "%; " + "io:" + str(io[1]) + "Blocks/s; " + "IPv4: " + str(ipv4[1]) + "Bits/s; " + "IPv6: " + str(ipv6[1]) + "Bits/s"
-        logging.critical(message)
+        logging.info(message)
 
 class Display():
 
