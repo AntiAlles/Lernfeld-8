@@ -11,7 +11,7 @@ class TestAlarm(unittest.TestCase):
         data = json.load(test_mock_data_file)
         test_mock_data_file.close()
 
-        response = Alarm.is_CPU_over_threshold(data, 0, 0)
+        response = Alarm.is_CPU_over_threshold(data, 0, 100)
         self.assertEqual(response, True)
 
     def test_alarm_CPU_under_threshold(self):
@@ -29,7 +29,7 @@ class TestAlarm(unittest.TestCase):
         data = json.load(test_mock_data_file)
         test_mock_data_file.close()
 
-        response = Alarm.is_IO_over_threshold(data, 0, 0)
+        response = Alarm.is_IO_over_threshold(data, 0, 100)
         self.assertEqual(response, True)
 
     def test_alarm_IO_under_threshold(self):
